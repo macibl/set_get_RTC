@@ -26,13 +26,13 @@ DS1307::DS1307(uint8_t addr, uint8_t sda, uint8_t scl, TwoWire *wireInst)
 
 char DS1307::begin()
 {
-
     if (_userI2C)
     {
         mWire->setSDA(_sda);
         mWire->setSCL(_scl);
     }
-    mWire->begin();
+    mWire->begin();                 // join the bus as a controller device
+    mWire->setClock(100000);        // The DS1307 operates in the standard mode (100kHz) only
     mWire->beginTransmission(_addr);
     mWire->write(0x00);             // first register to read is Seconds         
     mWire->endTransmission();
@@ -45,15 +45,15 @@ char DS1307::begin()
         a++;
     }
 
-    if (_data[0] & 0x80)        // if the nb of seconds is non-zero 
+    if (_data[0] & 0x80)        // if CH bit is 1 (ie clock halt)  
     {
         mWire->beginTransmission(_addr);
         mWire->write(0x00);
-        mWire->write(0x7F & _data[0]);
+        mWire->write(0x7F & _data[0]);  // then start clock (CH bit to 0)
         mWire->endTransmission();
     }
 
-    if (r)
+    if (r)      // if bytes read
     {
         return r;
     }
@@ -85,7 +85,8 @@ uint8_t DS1307::toChipFormat(int data)
 
     return result;
 }
-char DS1307::getTime()
+
+char DS1307::getTime()  // read all registers at once
 {
     mWire->beginTransmission(_addr);
     mWire->write(0x00);                 // first register to read is Seconds 
@@ -116,7 +117,7 @@ char DS1307::getTime()
     }
 
     // date
-    _day = (_data[3] & 0x07) % 7;                    // 1-7  day of week
+    _day = (_data[3] & 0x07) % 7;             // 0-6 day of week, before conversion with name of day with getDay()
     _date = fromChipFormat(_data[4]);         // 1-31 date
     _month = fromChipFormat(_data[5] & 0x3f); // 1- 12 month
     _year = fromChipFormat(_data[6]);         // 0- 99 year

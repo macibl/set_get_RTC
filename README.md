@@ -2,7 +2,7 @@
 set and get a DS1307 RTC, using works from Denics Devices DS1307 Arduino library you can see here: https://github.com/denicsdevices/DS1307
 - a few bugs on week's day fixed
 - serial.print error messages
-- access to saved memory addedd:\dossiers\dossier_embedded_real_time\Matos - RTC Seeed Studio\set_get_RTC\src\DS1307.h
+- access to saved memory added
 
 Original README is :
 # DS1307
