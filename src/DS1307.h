@@ -20,12 +20,12 @@ public:
   char begin();
   uint8_t fromChipFormat(uint8_t data);
   uint8_t toChipFormat(int data);
-  char getTime();
+  char    getTime();
 
   uint8_t getSeconds();  //return seconds
   uint8_t getMinute();   //return Minute
   uint8_t getHour();     //return Hour
-  char* getDay();      //return Day of Week
+  char*   getDay();      //return Day of Week
   uint8_t getDate();     //return Date
   uint8_t getMonth();    //return Month
   uint8_t getYear();     //return Year
