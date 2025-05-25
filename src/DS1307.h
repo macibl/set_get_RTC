@@ -11,6 +11,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#define RAMSIZE 56  // size of saved RAM in RTC (from 0x08 to 0x3F)
+
 class DS1307 {
 public:
   DS1307();
@@ -31,6 +33,8 @@ public:
   uint8_t getYear();     //return Year
   uint8_t getAMPM();     //return 0=AM  1=PM
   uint8_t getFormat();   //return 12 or 24 hour format
+
+  void    getRam(uint8_t* buf); // get Ram content
 
   void setFormat(uint8_t fmt);  // set time format 12 or 24
   void setAMPM(uint8_t ampm);   // set AM or PM   PM=1 AM=0

@@ -6,7 +6,7 @@
 
 #include "src/DS1307.h"
 
-#define testSet;        // define this if set of RTC is needed
+#define testSet 1        // define this if set of RTC is needed
 
 //DS1307 rtc(0x68,6,7,&Wire1);  // initiate library using Wire1 (I2C1) instance on RP2040 initiated on SDA=Pin(6) and SCL=Pin(7)
 DS1307 rtc(0x68, 8, 9, &Wire);  // initiate library using Wire (I2C0) instance on RP2040 initiated on SDA (GPIO8) and SCL (GPIO9)
@@ -15,6 +15,8 @@ DS1307 rtc(0x68, 8, 9, &Wire);  // initiate library using Wire (I2C0) instance o
   unsigned long beginSetMillis = 0;
   unsigned long endSetMillis = 0;
 #endif
+
+uint8_t dataRam[RAMSIZE];
 
 void setup() {
   Serial.begin(115200);
@@ -36,6 +38,11 @@ void setup() {
   else {
     Serial.print("No access to RTC registers - Check connexions then reboot \n");
     while(1);
+  }
+  rtc.getRam(dataRam);
+  Serial.println("index : data");
+  for (byte i = 0; i < RAMSIZE; i = i + 1) {
+    Serial.printf("%02X : %02X \n", i, dataRam[i]);
   }
 }
 

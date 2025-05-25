@@ -171,6 +171,22 @@ uint8_t DS1307::getFormat()
     return _hour12;
 }
 
+void DS1307::getRam(uint8_t* buf)
+{
+    mWire->beginTransmission(_addr);
+    mWire->write(0x08);                 // first register to read is RAM 
+    mWire->endTransmission();
+
+    int a = 0;
+    int r = (uint8_t)mWire->requestFrom((int)_addr, RAMSIZE);
+    while (mWire->available())
+    {
+        buf[a] = mWire->read();
+        a++;
+    }
+}
+
+
 void DS1307::setFormat(uint8_t fmt)
 {
     getTime();
